@@ -1,7 +1,7 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import { useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import "./Products.css"; // Import the CSS file
+
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState();
@@ -18,6 +18,7 @@ export default function Products() {
   const [limit, setLimit] = useState(2);
   const [editId, setEditId] = useState();
   const API_URL = import.meta.env.VITE_API_URL;
+
   const fetchProducts = async () => {
     try {
       setError("Loading...");
@@ -31,15 +32,18 @@ export default function Products() {
       setError("Something went wrong");
     }
   };
+
   useEffect(() => {
     fetchProducts();
+    // eslint-disable-next-line
   }, [page]);
+
   const handleDelete = async (id) => {
     try {
       const url = `${API_URL}/api/products/${id}`;
-      const result = await axios.delete(url);
-      setError("User Deleted Successfully");
-      fetchUsers();
+      await axios.delete(url);
+      setError("Product Deleted Successfully");
+      fetchProducts();
     } catch (err) {
       console.log(err);
       setError("Something went wrong");
@@ -59,8 +63,8 @@ export default function Products() {
     }
     try {
       const url = `${API_URL}/api/products`;
-      const result = await axios.post(url, form);
-      setError("User added succesfully");
+      await axios.post(url, form);
+      setError("Product added successfully");
       fetchProducts();
       resetForm();
     } catch (err) {
@@ -89,11 +93,11 @@ export default function Products() {
     }
     try {
       const url = `${API_URL}/api/products/${editId}`;
-      const result = await axios.patch(url, form);
+      await axios.patch(url, form);
       fetchProducts();
       setEditId();
       resetForm();
-      setError("User information updated successfully");
+      setError("Product information updated successfully");
     } catch (err) {
       console.log(err);
       setError("Something went wrong");
@@ -107,69 +111,70 @@ export default function Products() {
 
   const resetForm = () => {
     setForm({
-      ...form,
       productName: "",
       description: "",
       price: "",
       imgUrl: "",
     });
   };
+
   return (
-    <div>
-      <h2>Product Management</h2>
-      {error}
-      <div>
-        <form ref={frmRef}>
-          <input
-            name="productName"
-            value={form.productName}
-            type="text"
-            placeholder="Product Name"
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="description"
-            value={form.description}
-            type="text"
-            placeholder="Description"
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="price"
-            value={form.price}
-            type="text"
-            placeholder="Price"
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="imgUrl"
-            value={form.imgUrl}
-            type="text"
-            placeholder="Image Url"
-            onChange={handleChange}
-            required
-          />
-
-
-          {editId ? (
-            <>
-              <button onClick={handleUpdate}>Update</button>
-              <button onClick={handleCancel}>Cancel</button>
-            </>
-          ) : (
-            <button onClick={handleAdd}>Add</button>
-          )}
-        </form>
-      </div>
-      <div>
-        <input type="text" onChange={(e) => setSearchVal(e.target.value)} />
+    <div className="products-mgmt-container">
+      <h2 className="products-mgmt-title">Product Management</h2>
+      {error && <div className="cart-error">{error}</div>}
+      <form ref={frmRef} className="products-mgmt-form">
+        <input
+          name="productName"
+          value={form.productName}
+          type="text"
+          placeholder="Product Name"
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="description"
+          value={form.description}
+          type="text"
+          placeholder="Description"
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="price"
+          value={form.price}
+          type="text"
+          placeholder="Price"
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="imgUrl"
+          value={form.imgUrl}
+          type="text"
+          placeholder="Image Url"
+          onChange={handleChange}
+          required
+        />
+        {editId ? (
+          <>
+            <button onClick={handleUpdate}>Update</button>
+            <button onClick={handleCancel} type="button">Cancel</button>
+          </>
+        ) : (
+          <button onClick={handleAdd}>Add</button>
+        )}
+      </form>
+      <div className="products-mgmt-search">
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={searchVal}
+          onChange={(e) => setSearchVal(e.target.value)}
+        />
         <button onClick={fetchProducts}>Search</button>
       </div>
       <div>
-        <table border="1">
+        <table className="products-mgmt-table">
           <thead>
             <tr>
               <th>Product Name</th>
@@ -179,13 +184,17 @@ export default function Products() {
               <th>Action</th>
             </tr>
           </thead>
-          {products.map((value) => (
-            <tbody key={value._id}>
-              <tr>
+          <tbody>
+            {products.map((value) => (
+              <tr key={value._id}>
                 <td>{value.productName}</td>
                 <td>{value.description}</td>
                 <td>{value.price}</td>
-                <td>{value.imgUrl}</td>
+                <td>
+                  <a href={value.imgUrl} target="_blank" rel="noopener noreferrer">
+                    {value.imgUrl}
+                  </a>
+                </td>
                 <td>
                   <button onClick={() => handleEdit(value)}>Edit</button>
                   <button onClick={() => handleDelete(value._id)}>
@@ -193,15 +202,17 @@ export default function Products() {
                   </button>
                 </td>
               </tr>
-            </tbody>
-          ))}
+            ))}
+          </tbody>
         </table>
       </div>
-      <div>
+      <div className="products-mgmt-pagination">
         <button disabled={page === 1} onClick={() => setPage(page - 1)}>
           Previous
         </button>
-        Page {page} of {totalPages}
+        <span>
+          Page {page} of {totalPages}
+        </span>
         <button
           disabled={page === totalPages}
           onClick={() => setPage(page + 1)}

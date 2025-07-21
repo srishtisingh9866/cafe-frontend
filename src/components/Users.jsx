@@ -1,9 +1,8 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import { useRef } from "react";
-import { useContext } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { AppContext } from "../App";
 import axios from "axios";
+import "./Users.css"; // Import the CSS file
+
 export default function Users() {
   const [users, setUsers] = useState([]);
   const { user } = useContext(AppContext);
@@ -19,9 +18,10 @@ export default function Users() {
   const [page, setPage] = useState(1);
   const [searchVal, setSearchVal] = useState("");
   const [totalPages, setTotalPages] = useState(1);
-  const [limit, setLimit] = useState(2);
+  const [limit] = useState(2);
   const [editId, setEditId] = useState();
   const API_URL = import.meta.env.VITE_API_URL;
+
   const fetchUsers = async () => {
     try {
       setError("Loading...");
@@ -39,13 +39,16 @@ export default function Users() {
       setError("Something went wrong");
     }
   };
+
   useEffect(() => {
     fetchUsers();
+    // eslint-disable-next-line
   }, [page]);
+
   const handleDelete = async (id) => {
     try {
       const url = `${API_URL}/api/users/${id}`;
-      const result = await axios.delete(url, {
+      await axios.delete(url, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -71,12 +74,12 @@ export default function Users() {
     }
     try {
       const url = `${API_URL}/api/users`;
-      const result = await axios.post(url, form, {
+      await axios.post(url, form, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       });
-      setError("User added succesfully");
+      setError("User added successfully");
       fetchUsers();
       resetForm();
     } catch (err) {
@@ -88,7 +91,6 @@ export default function Users() {
   const handleEdit = (user) => {
     setEditId(user._id);
     setForm({
-      ...form,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
@@ -106,7 +108,7 @@ export default function Users() {
     }
     try {
       const url = `${API_URL}/api/users/${editId}`;
-      const result = await axios.patch(url, form, {
+      await axios.patch(url, form, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -128,7 +130,6 @@ export default function Users() {
 
   const resetForm = () => {
     setForm({
-      ...form,
       firstName: "",
       lastName: "",
       email: "",
@@ -136,89 +137,86 @@ export default function Users() {
       role: "",
     });
   };
-  return (
-    <div>
-      <h2>User Management</h2>
-      {error}
-      <div>
-        <form ref={frmRef}>
-          <input
-            name="firstName"
-            value={form.firstName}
-            type="text"
-            placeholder="First Name"
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="lastName"
-            value={form.lastName}
-            type="text"
-            placeholder="Last Name"
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="email"
-            value={form.email}
-            type="text"
-            placeholder="Email Address"
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="password"
-            value={form.password}
-            type="password"
-            placeholder="New Password"
-            onChange={handleChange}
-            required
-          />
-          <select
-            name="role"
-            value={form.role}
-            required
-            onChange={handleChange}
-          >
-            <option value="">--Select Role--</option>
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-          </select>
-          {/* <input
-            name="role"
-            value={form.role}
-            type="text"
-            onChange={handleChange}
-            placeholder="Role"
-          /> */}
 
-          {editId ? (
-            <>
-              <button onClick={handleUpdate}>Update</button>
-              <button onClick={handleCancel}>Cancel</button>
-            </>
-          ) : (
-            <button onClick={handleAdd}>Add</button>
-          )}
-        </form>
+  return (
+    <div className="users-mgmt-container">
+      <h2 className="users-mgmt-title">User Management</h2>
+      {error && <div className="cart-error">{error}</div>}
+      <form ref={frmRef} className="users-mgmt-form">
+        <input
+          name="firstName"
+          value={form.firstName}
+          type="text"
+          placeholder="First Name"
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="lastName"
+          value={form.lastName}
+          type="text"
+          placeholder="Last Name"
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="email"
+          value={form.email}
+          type="text"
+          placeholder="Email Address"
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="password"
+          value={form.password}
+          type="password"
+          placeholder="New Password"
+          onChange={handleChange}
+          required
+        />
+        <select
+          name="role"
+          value={form.role}
+          required
+          onChange={handleChange}
+        >
+          <option value="">--Select Role--</option>
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+        {editId ? (
+          <>
+            <button onClick={handleUpdate}>Update</button>
+            <button onClick={handleCancel} type="button">Cancel</button>
+          </>
+        ) : (
+          <button onClick={handleAdd}>Add</button>
+        )}
+      </form>
+      <div className="users-mgmt-search">
+        <input
+          type="text"
+          placeholder="Search users..."
+          value={searchVal}
+          onChange={(e) => setSearchVal(e.target.value)}
+        />
+        <button onClick={fetchUsers}>Search</button>
       </div>
       <div>
-        <input type="text" onChange={(e) => setSearchVal(e.target.value)} />
-        <button onClick={() => fetchUsers()}>Search</button>
-      </div>
-      <div>
-        <table border="1">
+        <table className="users-mgmt-table">
           <thead>
             <tr>
               <th>First Name</th>
               <th>Last Name</th>
               <th>Email Address</th>
               <th>Role</th>
+              <th>Action</th>
             </tr>
           </thead>
-          {users.map((value) => (
-            <tbody key={value._id}>
-              <tr>
+          <tbody>
+            {users.map((value) => (
+              <tr key={value._id}>
                 <td>{value.firstName}</td>
                 <td>{value.lastName}</td>
                 <td>{value.email}</td>
@@ -230,15 +228,17 @@ export default function Users() {
                   </button>
                 </td>
               </tr>
-            </tbody>
-          ))}
+            ))}
+          </tbody>
         </table>
       </div>
-      <div>
+      <div className="users-mgmt-pagination">
         <button disabled={page === 1} onClick={() => setPage(page - 1)}>
           Previous
         </button>
-        Page {page} of {totalPages}
+        <span>
+          Page {page} of {totalPages}
+        </span>
         <button
           disabled={page === totalPages}
           onClick={() => setPage(page + 1)}

@@ -1,0 +1,85 @@
+/* Order.css */
+.orders-container {
+  max-width: 900px;
+  margin: 3vh auto;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+}
+
+.order-card {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+
+.order-card p {
+  margin: 0.3rem 0;
+  color: #334155;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.7rem;
+  margin-bottom: 1rem;
+}
+
+.order-table th, .order-table td {
+  border: 1px solid #cbd5e1;
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+}
+
+.order-table th {
+  background: #f1f5f9;
+  color: #2563eb;
+}
+
+.order-table td {
+  background: #f8fafc;
+}
+
+@media (max-width: 700px) {
+  .orders-container {
+    padding: 0.5rem;
+  }
+  .order-table th, .order-table td {
+    padding: 0.3rem 0.4rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .order-table, .order-table thead, .order-table tbody, .order-table th, .order-table td, .order-table tr {
+    display: block;
+    width: 100%;
+  }
+  .order-table thead {
+    display: none;
+  }
+  .order-table tr {
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  .order-table td {
+    position: relative;
+    padding-left: 50%;
+    border: none;
+    border-bottom: 1px solid #e2e8f0;
+    background: #fff;
+  }
+  .order-table td:before {
+    position: absolute;
+    left: 0.7rem;
+    top: 0.5rem;
+    width: 45%;
+    white-space: nowrap;
+    font-weight: bold;
+    color: #2563eb;
+    content: attr(data-label);
+  }
+}

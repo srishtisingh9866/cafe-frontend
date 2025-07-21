@@ -1,23 +1,56 @@
-
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
-import App, { AppContext } from "../App";
+import { AppContext } from "../App";
+import "./Header.css";
+
 export default function Header() {
   const { user } = useContext(AppContext);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleMenuToggle = () => setMenuOpen((open) => !open);
+
+  // Close menu on navigation (optional, for better UX)
+  const handleNavClick = () => setMenuOpen(false);
+
   return (
-    <div>
-      <h1>MERN Frontend</h1>
-      <Link to="/">Home</Link>-<Link to="/cart">MyCart</Link>-
-      <Link to="/order">MyOrder</Link>
-
-      {/* <Link to="/admin">Admin</Link> */}
-
-      -{user?.role === "admin" && <Link to="/admin">Admin</Link>}
-      
-      {user?.token ? <Link to="/profile">Profile</Link> : <Link to="/login">Login</Link> }
-
-
-    </div>
+    <header>
+      <div className="header-container">
+        <h1>
+          <Link to="/" className="logo" onClick={handleNavClick}>
+            MERN Frontend
+          </Link>
+        </h1>
+        <div className="hamburger" onClick={handleMenuToggle}>
+          <span />
+          <span />
+          <span />
+        </div>
+        <nav className="navbar">
+          <ul className={menuOpen ? "open" : ""}>
+            <li>
+              <Link to="/" onClick={handleNavClick}>Home</Link>
+            </li>
+            <li>
+              <Link to="/cart" onClick={handleNavClick}>MyCart</Link>
+            </li>
+            <li>
+              <Link to="/order" onClick={handleNavClick}>MyOrder</Link>
+            </li>
+            {user?.role === "admin" && (
+              <li>
+                <Link to="/admin" onClick={handleNavClick}>Admin</Link>
+              </li>
+            )}
+            <li>
+              {user?.token ? (
+                <Link to="/profile" onClick={handleNavClick}>Profile</Link>
+              ) : (
+                <Link to="/login" onClick={handleNavClick}>Login</Link>
+              )}
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
   );
 }

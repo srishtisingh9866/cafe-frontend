@@ -1,0 +1,162 @@
+/* Users.css */
+.users-mgmt-container {
+  max-width: 900px;
+  margin: 4vh auto;
+  padding: 2rem 1.5rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+}
+
+.users-mgmt-title {
+  text-align: center;
+  color: #2563eb;
+  margin-bottom: 1.5rem;
+}
+
+.users-mgmt-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.users-mgmt-form input,
+.users-mgmt-form select {
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 1rem;
+  min-width: 180px;
+}
+
+.users-mgmt-form button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.users-mgmt-form button:hover {
+  background: #1d4ed8;
+}
+
+.users-mgmt-search {
+  display: flex;
+  gap: 0.7rem;
+  margin-bottom: 1.5rem;
+  justify-content: flex-end;
+}
+
+.users-mgmt-search input {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 1rem;
+}
+
+.users-mgmt-search button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.users-mgmt-search button:hover {
+  background: #1d4ed8;
+}
+
+.users-mgmt-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.users-mgmt-table th, .users-mgmt-table td {
+  border: 1px solid #cbd5e1;
+  padding: 0.7rem 0.8rem;
+  text-align: left;
+}
+
+.users-mgmt-table th {
+  background: #f1f5f9;
+  color: #2563eb;
+}
+
+.users-mgmt-table td {
+  background: #f8fafc;
+  word-break: break-word;
+}
+
+.users-mgmt-table button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.98rem;
+  cursor: pointer;
+  margin-right: 0.4rem;
+  transition: background 0.2s;
+}
+
+.users-mgmt-table button:hover {
+  background: #1d4ed8;
+}
+
+.users-mgmt-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+}
+
+.users-mgmt-pagination button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.users-mgmt-pagination button:disabled {
+  background: #cbd5e1;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+  .users-mgmt-container {
+    padding: 1rem 0.3rem;
+  }
+  .users-mgmt-form {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .users-mgmt-search {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  .users-mgmt-table th, .users-mgmt-table td {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.95rem;
+  }
+}
